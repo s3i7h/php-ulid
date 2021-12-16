@@ -42,7 +42,7 @@ class Base32
 
     public static function decode(string $value): ByteArray
     {
-        assert(preg_match('/[' . static::BASE_32_CHARS .']+/', $value), '$value must be a valid base32 string');
+        assert(preg_match('/^[' . static::BASE_32_CHARS .']+$/', $value), '$value must be a valid base32 string');
         $decoded = [];
         foreach (str_split($value) as $char) {
             $decoded[] = static::BASE_32_TABLE[$char];
