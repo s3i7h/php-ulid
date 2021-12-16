@@ -5,7 +5,7 @@ namespace Ulid\Internal;
 use OverflowException;
 
 /**
- * A class to manipulate array as byte array
+ * A class to manipulate byte array (and an array like it)
  * Stores internally in little endian, but represents it in big endian
  *
  * example:
