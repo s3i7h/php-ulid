@@ -5,7 +5,13 @@ namespace Ulid\Internal;
 use OverflowException;
 
 /**
- * A class to manipulate array as byte array in little endian
+ * A class to manipulate array as byte array
+ * Stores internally in little endian, but represents it in big endian
+ *
+ * example:
+ * $a = new ByteArray([1, 0]);
+ * $b = new ByteArray([1]);
+ * $a->add($b)->toBytes() === (new ByteArray([1, 1]))->toBytes();
  *
  * @internal
  */
@@ -47,14 +53,6 @@ class ByteArray
     public static function fromInt(int $value)
     {
         return static::fromBytes(pack("J", $value));
-    }
-
-    public function isZero(): bool
-    {
-        return array_reduce($this->values, function($acc, $item) {
-            if (! $acc) return $acc;
-            return $item === 0;
-        }, true);
     }
 
     /**
@@ -136,6 +134,8 @@ class ByteArray
     }
 
     /**
+     * slice the byte array from the lower end
+     *
      * @param int $offset
      * @param int $length
      * @return static
@@ -154,6 +154,8 @@ class ByteArray
     }
 
     /**
+     * slice the byte array from the higher end
+     *
      * @param int $offset
      * @param int $length
      * @return static
@@ -172,6 +174,8 @@ class ByteArray
     }
 
     /**
+     * Drop the higher 0s
+     *
      * @return static
      */
     public function trim()
