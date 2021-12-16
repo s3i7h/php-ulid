@@ -71,6 +71,7 @@ class ByteArray
         assert($target instanceof self);
         assert($this->bits === $target->bits);
 
+        $target = $target->trim();
         $result = [];
         $carry = 0;
         $i = 0;
@@ -78,7 +79,7 @@ class ByteArray
             throw new OverflowException();
         }
         while ($i < count($this->values)) {
-            $sum = $i > count($target->values) ? 0 : $target->values[$i];
+            $sum = $i < count($target->values) ? $target->values[$i] : 0;
             $sum += $carry + $this->values[$i];
             $carry = $sum >> $this->bits;
             $result[] = $sum & (2**$this->bits-1);
@@ -135,12 +136,54 @@ class ByteArray
     }
 
     /**
+     * @param int $offset
      * @param int $length
      * @return static
      */
-    public function chomp(int $length)
+    public function chomp(int $offset = null, int $length = null)
     {
-        return new static(array_reverse(array_slice($this->values, 0, $length)), $this->bits);
+        if (is_null($offset) && is_null($length)) {
+            $offset = count($this->values);
+        } else if (is_null($offset)) {
+            $offset = 0;
+        } else if (is_null($length)) {
+            $length = $offset;
+            $offset = 0;
+        }
+        return new static(array_reverse(array_slice($this->values, $offset, $length)), $this->bits);
+    }
+
+    /**
+     * @param int $offset
+     * @param int $length
+     * @return static
+     */
+    public function slice(int $offset = null, int $length = null)
+    {
+        if (is_null($offset) && is_null($length)) {
+            $offset = count($this->values);
+        } else if (is_null($offset)) {
+            $offset = 0;
+        } else if (is_null($length)) {
+            $length = $offset;
+            $offset = 0;
+        }
+        return new static(array_slice(array_reverse($this->values), $offset, $length), $this->bits);
+    }
+
+    /**
+     * @return static
+     */
+    public function trim()
+    {
+        $trimmed = [];
+        foreach ($this->toArray() as $item) {
+            if (! $item) {
+                continue;
+            }
+            $trimmed[] = $item;
+        }
+        return new static($trimmed, $this->bits);
     }
 
     public function toBytes(): string

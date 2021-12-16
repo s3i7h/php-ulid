@@ -11,6 +11,11 @@ use Ulid\Internal\ByteArray;
 
 class Ulid implements JsonSerializable, Stringable
 {
+    /** @var bool */
+    public static $monotonic = false;
+    /** @var static */
+    public static $lastGenerated = null;
+
     const REGEX_ULID_REPRESENTATION = '/[0-7][0123456789ABCDEFGHJKMNPQRSTVWXYZ]{25}/';
     const REGEX_UUID_REPRESENTATION = '/[0-F]{8}-[0-F]{4}-[0-F]{4}-[0-F]{4}-[0-F]{12}/';
 
@@ -66,8 +71,20 @@ class Ulid implements JsonSerializable, Stringable
     {
         $ts = ByteArray::fromInt($timestamp)->chomp(6);
         $random = ByteArray::fromBytes(random_bytes(10));
+        if (
+            static::$monotonic &&
+            static::$lastGenerated &&
+            static::$lastGenerated->bytes->slice(6)->toBytes() === $ts->toBytes()
+        ) {
+            $random = static::$lastGenerated->bytes->slice(6, 10)->add(1);
+        }
 
-        return new static(new ByteArray(array_merge($ts->toArray(), $random->toArray())));
+        $self = new static(new ByteArray(array_merge($ts->toArray(), $random->toArray())));
+        if (static::$monotonic) {
+            static::$lastGenerated = $self;
+        }
+
+        return $self;
     }
 
     /**
@@ -119,6 +136,11 @@ class Ulid implements JsonSerializable, Stringable
             substr($combined, 16, 4),
             substr($combined, 20, 12),
         ]);
+    }
+
+    public function timestamp(): int
+    {
+        return $this->toBytes();
     }
 
     public function __toString()
