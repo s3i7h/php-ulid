@@ -5,6 +5,7 @@ namespace Ulid;
 use Exception;
 use JsonSerializable;
 use Stringable;
+use TypeError;
 use Ulid\Internal\Base32;
 use Ulid\Internal\ByteArray;
 
@@ -39,9 +40,11 @@ class Ulid implements JsonSerializable, Stringable
                 $self = new static(ByteArray::fromBytes($value));
             }
             $this->bytes = $self->bytes;
-        } else {
+        } else if (is_null($value)) {
             $self = static::generate();
             $this->bytes = $self->bytes;
+        } else {
+            throw new TypeError('unrecognized value was given to new Ulid()');
         }
     }
 
