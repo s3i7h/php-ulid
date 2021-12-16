@@ -76,7 +76,7 @@ class Ulid implements JsonSerializable, Stringable
             static::$lastGenerated &&
             static::$lastGenerated->bytes->slice(6)->toBytes() === $ts->toBytes()
         ) {
-            $random = static::$lastGenerated->bytes->slice(6, 10)->add(1);
+            $random = static::$lastGenerated->bytes->chomp(10)->add(1);
         }
 
         $self = new static(new ByteArray(array_merge($ts->toArray(), $random->toArray())));
