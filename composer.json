@@ -1,0 +1,23 @@
+{
+    "name": "yu-ichiro/ulid",
+    "description": "A simple and robust implementation of ULID in PHP",
+    "type": "library",
+    "require-dev": {
+        "phpstan/phpstan": "^1.2",
+        "phpunit/phpunit": "^9.5",
+        "squizlabs/php_codesniffer": "^3.6"
+    },
+    "license": "Apache License 2.0",
+    "authors": [
+        {
+            "name": "Yuichiro Luke Smith",
+            "email": "contact@yu-smith.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Ulid\\": "src/Ulid/"
+        }
+    }
+}
