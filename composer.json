@@ -6,7 +6,11 @@
         "phpstan/phpstan": "^1.2",
         "phpunit/phpunit": "^9.5",
         "squizlabs/php_codesniffer": "^3.6",
-        "psy/psysh": "^0.11.0"
+        "psy/psysh": "^0.11.0",
+        "ramsey/uuid": "^4.2"
+    },
+    "suggest": {
+        "ramsey/uuid": "This dependency will make Ulid::toUuid() compatible with Uuid"
     },
     "license": "Apache License 2.0",
     "authors": [

@@ -3,11 +3,12 @@
 namespace Ulid;
 
 use Exception;
-use JsonSerializable;
 use Stringable;
 use TypeError;
 use Ulid\Internal\Base32;
 use Ulid\Internal\ByteArray;
+use Ulid\Internal\Uuid;
+use Ulid\Internal\JsonSerializable;
 
 class Ulid implements JsonSerializable, Stringable
 {
@@ -36,7 +37,8 @@ class Ulid implements JsonSerializable, Stringable
         } else if (is_int($value)) {
             $self = static::generateFromTimestamp($value);
             $this->bytes = $self->bytes;
-        } else if (is_string($value)) {
+        } else if (is_string($value) || $value instanceof Stringable) {
+            $value = (string) $value;
             if (preg_match(static::REGEX_ULID_REPRESENTATION, strtoupper($value))) {
                 $self = static::parseUlidString(strtoupper($value));
             } else if (preg_match(static::REGEX_UUID_REPRESENTATION, strtoupper($value))) {
@@ -124,18 +126,11 @@ class Ulid implements JsonSerializable, Stringable
     }
 
     /**
-     * @return string
+     * @return \JsonSerializable|string
      */
-    public function toUuid(): string
+    public function toUuid()
     {
-        $combined = bin2hex($this->bytes->toBytes());
-        return implode('-', [
-            substr($combined, 0, 8),
-            substr($combined, 8, 4),
-            substr($combined, 12, 4),
-            substr($combined, 16, 4),
-            substr($combined, 20, 12),
-        ]);
+        return Uuid::fromBytes($this->toBytes());
     }
 
     public function timestamp(): int
