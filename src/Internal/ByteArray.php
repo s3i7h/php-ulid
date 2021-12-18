@@ -145,6 +145,9 @@ class ByteArray
      */
     public function convertBits(int $bits, int $length = null)
     {
+        if ($bits === $this->bits) {
+            return $this->chomp($length);
+        }
         $result = [];
         $i = 0;
 
