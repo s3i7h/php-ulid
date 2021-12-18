@@ -118,11 +118,6 @@ class Ulid implements JsonSerializable, Stringable
         return Uuid::fromBytes($this->toBytes());
     }
 
-    public function timestamp(): int
-    {
-        return $this->toBytes();
-    }
-
     public function __toString()
     {
         return $this->toString();

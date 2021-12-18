@@ -9,7 +9,7 @@ use Ulid\Ulid;
 class MonotonicFactory implements UlidFactoryInterface
 {
     /** @var ByteArray|null */
-    public static $lastGeneratedBytes = null;
+    protected static $lastGeneratedBytes = null;
 
     /**
      * @throws Exception
