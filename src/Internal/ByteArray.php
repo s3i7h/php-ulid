@@ -86,9 +86,10 @@ class ByteArray
      */
     public function concat(self $other)
     {
+        assert($this->bits === $other->bits, 'The two ByteArray must have same $bits');
         return new static(array_merge(
             $this->toArray(),
-            $other->convertBits($this->bits)->trim()->toArray()
+            $other->toArray()
         ), $this->bits);
     }
 
