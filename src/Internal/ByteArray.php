@@ -81,6 +81,18 @@ class ByteArray
     }
 
     /**
+     * @param self $other
+     * @return static
+     */
+    public function concat(self $other)
+    {
+        return new static(array_merge(
+            $this->toArray(),
+            $other->convertBits($this->bits)->trim()->toArray()
+        ), $this->bits);
+    }
+
+    /**
      * @param int|array|self $target
      * @return static
      */
