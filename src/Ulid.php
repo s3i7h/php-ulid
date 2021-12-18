@@ -152,4 +152,11 @@ class Ulid implements JsonSerializable, Stringable
     {
         return $this->toString();
     }
+
+    public function __debugInfo()
+    {
+        return [
+            'ulid' => $this->toString()
+        ];
+    }
 }
