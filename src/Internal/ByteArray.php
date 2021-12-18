@@ -23,13 +23,13 @@ class ByteArray
     protected $bits;
 
     /**
-     * @var int[] $arrays
+     * @var int[] $values
      */
     protected $values;
 
     /**
-     * @param int[]    $values
-     * @param int|null $bits
+     * @param int[] $values
+     * @param int   $bits
      */
     public function __construct(array $values, int $bits = 8)
     {
@@ -101,7 +101,7 @@ class ByteArray
     }
 
     /**
-     * @param  int|array|self $target
+     * @param  int|int[]|self $target
      * @return static
      */
     public function add($target)
@@ -109,7 +109,7 @@ class ByteArray
         if (is_int($target)) {
             return $this->add(static::fromInt($target)->convertBits($this->bits));
         } elseif (is_array($target)) {
-            return $this->add(new static($target));
+            return $this->add((new static($target))->convertBits($this->bits));
         }
         assert($target instanceof self);
         assert($this->bits === $target->bits);
@@ -254,7 +254,10 @@ class ByteArray
         return pack("C*", ...array_reverse($this->convertBits(8)->values));
     }
 
-    public function toArray(): array
+    /**
+     * @return int[]
+     */
+    public function toArray()
     {
         return array_reverse($this->values);
     }

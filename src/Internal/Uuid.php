@@ -20,6 +20,10 @@ if (class_exists('\Ramsey\Uuid\Uuid')) {
     // phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses
     final class Uuid
     {
+        /**
+         * @param string $bytes
+         * @return string
+         */
         public static function fromBytes(string $bytes)
         {
             $combined = bin2hex($bytes);

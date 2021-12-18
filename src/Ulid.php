@@ -15,7 +15,7 @@ use Ulid\Internal\JsonSerializable;
 class Ulid implements JsonSerializable, Stringable
 {
     /**
-     * @var UlidFactoryInterface
+     * @var class-string<UlidFactoryInterface>
      */
     public static $factory = MonotonicFactory::class;
 
@@ -28,7 +28,7 @@ class Ulid implements JsonSerializable, Stringable
     protected $bytes;
 
     /**
-     * @param  Ulid|int|string|array|null $value
+     * @param  Ulid|int|string|ByteArray|Stringable|null $value
      * @throws Exception
      */
     public function __construct($value = null)
@@ -65,7 +65,7 @@ class Ulid implements JsonSerializable, Stringable
      */
     public static function generate()
     {
-        return static::$factory::generate();
+        return new static(static::$factory::generate());
     }
 
     /**
@@ -75,7 +75,7 @@ class Ulid implements JsonSerializable, Stringable
      */
     public static function generateFromTimestamp(int $timestamp)
     {
-        return static::$factory::generateFromTimestamp($timestamp);
+        return new static(static::$factory::generateFromTimestamp($timestamp));
     }
 
     /**
@@ -132,6 +132,9 @@ class Ulid implements JsonSerializable, Stringable
         return $this->toString();
     }
 
+    /**
+     * @return string[]
+     */
     public function __debugInfo()
     {
         return [

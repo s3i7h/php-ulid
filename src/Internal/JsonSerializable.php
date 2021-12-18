@@ -20,6 +20,9 @@ if (interface_exists('\JsonSerializable')) {
     // phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses
     interface JsonSerializable
     {
+        /**
+         * @return mixed
+         */
         public function jsonSerialize();
     }
 }
