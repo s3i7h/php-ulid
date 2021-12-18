@@ -2,6 +2,11 @@
 
 namespace Ulid\Internal;
 
+/**
+ * A class for converting between ByteArray and base32 string
+ *
+ * @internal
+ */
 class Base32
 {
     const BASE_32_CHARS = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
