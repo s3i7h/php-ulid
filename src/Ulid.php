@@ -12,7 +12,7 @@ use Ulid\Internal\ByteArray;
 class Ulid implements JsonSerializable, Stringable
 {
     /** @var bool */
-    public static $monotonic = false;
+    public static $monotonic = true;
     /** @var static */
     public static $lastGenerated = null;
 
