@@ -8,3 +8,4 @@ composer.phar
 .idea
 *.cache
 composer.lock
+coverage.xml
