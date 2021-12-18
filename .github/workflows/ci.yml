@@ -13,8 +13,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: composer:v1
-          extensions: none, mbstring
+          extensions: mbstring
       - name: Cache vendor
         uses: actions/cache@v2
         with:
@@ -36,8 +35,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: composer:v1
-          extensions: none, mbstring
+          extensions: mbstring
       - name: Cache vendor
         uses: actions/cache@v2
         with:
@@ -59,8 +57,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          tools: composer:v1
-          extensions: none, mbstring
+          extensions: mbstring
       - name: Cache vendor
         uses: actions/cache@v2
         with:
