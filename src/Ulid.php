@@ -106,7 +106,7 @@ class Ulid implements JsonSerializable, Stringable
      */
     public static function parseUuidString(string $value)
     {
-        return new static(hex2bin(str_replace('-', '', $value)));
+        return new static(ByteArray::fromBytes(hex2bin(str_replace('-', '', $value))));
     }
 
     /**
