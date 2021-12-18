@@ -5,6 +5,8 @@ namespace Ulid;
 use Exception;
 use Stringable;
 use TypeError;
+use Ulid\Factory\MonotonicFactory;
+use Ulid\Factory\UlidFactoryInterface;
 use Ulid\Internal\Base32;
 use Ulid\Internal\ByteArray;
 use Ulid\Internal\Uuid;
@@ -12,10 +14,8 @@ use Ulid\Internal\JsonSerializable;
 
 class Ulid implements JsonSerializable, Stringable
 {
-    /** @var bool */
-    public static $monotonic = true;
-    /** @var static */
-    public static $lastGenerated = null;
+    /** @var UlidFactoryInterface */
+    public static $factory = MonotonicFactory::class;
 
     const REGEX_ULID_REPRESENTATION = '/[0-7][0123456789ABCDEFGHJKMNPQRSTVWXYZ]{25}/';
     const REGEX_UUID_REPRESENTATION = '/[0-F]{8}-[0-F]{4}-[0-F]{4}-[0-F]{4}-[0-F]{12}/';
@@ -61,7 +61,7 @@ class Ulid implements JsonSerializable, Stringable
      */
     public static function generate()
     {
-        return static::generateFromTimestamp((int) floor(microtime(true) * 1000));
+        return static::$factory::generate();
     }
 
     /**
@@ -71,22 +71,7 @@ class Ulid implements JsonSerializable, Stringable
      */
     public static function generateFromTimestamp(int $timestamp)
     {
-        $ts = ByteArray::fromInt($timestamp)->convertBits(8, 6);
-        $random = ByteArray::fromBytes(random_bytes(10));
-        if (
-            static::$monotonic &&
-            static::$lastGenerated &&
-            static::$lastGenerated->bytes->slice(6)->toBytes() === $ts->toBytes()
-        ) {
-            $random = static::$lastGenerated->bytes->chomp(10)->add(1);
-        }
-
-        $self = new static(new ByteArray(array_merge($ts->toArray(), $random->toArray())));
-        if (static::$monotonic) {
-            static::$lastGenerated = $self;
-        }
-
-        return $self;
+        return static::$factory::generateFromTimestamp($timestamp);
     }
 
     /**
