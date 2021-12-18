@@ -59,7 +59,7 @@ class Ulid implements JsonSerializable, Stringable
      */
     public static function generate()
     {
-        return static::generateFromTimestamp(floor(microtime(true) * 1000));
+        return static::generateFromTimestamp((int) floor(microtime(true) * 1000));
     }
 
     /**
@@ -69,7 +69,7 @@ class Ulid implements JsonSerializable, Stringable
      */
     public static function generateFromTimestamp(int $timestamp)
     {
-        $ts = ByteArray::fromInt($timestamp)->chomp(6);
+        $ts = ByteArray::fromInt($timestamp)->convertBits(8, 6);
         $random = ByteArray::fromBytes(random_bytes(10));
         if (
             static::$monotonic &&
