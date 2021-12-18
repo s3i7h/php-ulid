@@ -8,7 +8,9 @@ use Ulid\Ulid;
 
 class MonotonicFactory implements UlidFactoryInterface
 {
-    /** @var ByteArray|null */
+    /**
+     * @var ByteArray|null
+     */
     protected static $lastGeneratedBytes = null;
 
     /**
@@ -38,8 +40,7 @@ class MonotonicFactory implements UlidFactoryInterface
     public static function generateFromTimestamp(int $timestamp): Ulid
     {
         $ts = ByteArray::fromInt($timestamp)->convertBits(8, 6);
-        if (
-            static::$lastGeneratedBytes
+        if (static::$lastGeneratedBytes
             && static::$lastGeneratedBytes->slice(6)->toBytes() === $ts->toBytes()
         ) {
             $random = static::$lastGeneratedBytes->chomp(10)->add(1);

@@ -14,17 +14,21 @@ use Ulid\Internal\JsonSerializable;
 
 class Ulid implements JsonSerializable, Stringable
 {
-    /** @var UlidFactoryInterface */
+    /**
+     * @var UlidFactoryInterface
+     */
     public static $factory = MonotonicFactory::class;
 
     const REGEX_ULID_REPRESENTATION = '/[0-7][0123456789ABCDEFGHJKMNPQRSTVWXYZ]{25}/';
     const REGEX_UUID_REPRESENTATION = '/[0-F]{8}-[0-F]{4}-[0-F]{4}-[0-F]{4}-[0-F]{12}/';
 
-    /** @var ByteArray $bytes */
+    /**
+     * @var ByteArray $bytes
+     */
     protected $bytes;
 
     /**
-     * @param Ulid|int|string|array|null $value
+     * @param  Ulid|int|string|array|null $value
      * @throws Exception
      */
     public function __construct($value = null)
@@ -32,22 +36,22 @@ class Ulid implements JsonSerializable, Stringable
         if ($value instanceof Ulid) {
             $self = clone $value;
             $this->bytes = $self->bytes;
-        } else if ($value instanceof ByteArray) {
+        } elseif ($value instanceof ByteArray) {
             $this->bytes = $value->convertBits(8, 16);
-        } else if (is_int($value)) {
+        } elseif (is_int($value)) {
             $self = static::generateFromTimestamp($value);
             $this->bytes = $self->bytes;
-        } else if (is_string($value) || $value instanceof Stringable) {
+        } elseif (is_string($value) || $value instanceof Stringable) {
             $value = (string) $value;
             if (preg_match(static::REGEX_ULID_REPRESENTATION, strtoupper($value))) {
                 $self = static::parseUlidString(strtoupper($value));
-            } else if (preg_match(static::REGEX_UUID_REPRESENTATION, strtoupper($value))) {
+            } elseif (preg_match(static::REGEX_UUID_REPRESENTATION, strtoupper($value))) {
                 $self = static::parseUuidString(strtoupper($value));
             } else {
                 $self = new static(ByteArray::fromBytes($value));
             }
             $this->bytes = $self->bytes;
-        } else if (is_null($value)) {
+        } elseif (is_null($value)) {
             $self = static::generate();
             $this->bytes = $self->bytes;
         } else {
@@ -65,7 +69,7 @@ class Ulid implements JsonSerializable, Stringable
     }
 
     /**
-     * @param int $timestamp timestamp in milliseconds
+     * @param  int $timestamp timestamp in milliseconds
      * @return static
      * @throws Exception
      */
@@ -75,7 +79,7 @@ class Ulid implements JsonSerializable, Stringable
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return static
      * @throws Exception
      */
@@ -85,7 +89,7 @@ class Ulid implements JsonSerializable, Stringable
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return static
      * @throws Exception
      */

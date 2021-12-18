@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Ulid\Ulid;
 
 final class UlidTest extends \PHPUnit\Framework\TestCase

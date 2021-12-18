@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<ruleset name="Laravel Standards">
+    <description>The Laravel Coding Standards</description>
+
+    <!-- 対象フォルダ -->
+    <file>./src</file>
+    <file>./tests</file>
+
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+
+    <!-- PSR2をベースとする -->
+    <rule ref="PSR2"/>
+
+    <arg name="colors"/>
+    <arg value="p"/>
+
+    <ini name="memory_limit" value="-1"/>
+</ruleset>

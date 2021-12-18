@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests;
+
 use Ulid\Factory\MonotonicFactory;
 
 class TestFactory extends MonotonicFactory

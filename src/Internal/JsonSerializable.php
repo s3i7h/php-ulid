@@ -8,14 +8,18 @@ if (interface_exists('\JsonSerializable')) {
      *
      * @internal
      */
-    interface JsonSerializable extends \JsonSerializable {}
+    interface JsonSerializable extends \JsonSerializable
+    {
+    }
 } else {
     /**
      * a fallback interface for JsonSerializable
      *
      * @internal
      */
-    interface JsonSerializable {
+    // phpcs:ignore PSR1.Classes.ClassDeclaration.MultipleClasses
+    interface JsonSerializable
+    {
         public function jsonSerialize();
     }
 }

@@ -17,14 +17,18 @@ use OverflowException;
  */
 class ByteArray
 {
-    /** @var int $bits */
+    /**
+     * @var int $bits
+     */
     protected $bits;
 
-    /** @var int[] $arrays */
+    /**
+     * @var int[] $arrays
+     */
     protected $values;
 
     /**
-     * @param int[] $values
+     * @param int[]    $values
      * @param int|null $bits
      */
     public function __construct(array $values, int $bits = 8)
@@ -54,7 +58,7 @@ class ByteArray
      * self::bitmask(3) === 7 === 0b111
      * self::bitmask(self::maxBits()) === PHP_INT_MAX
      *
-     * @param int $bits
+     * @param  int $bits
      * @return int
      */
     private static function bitmask(int $bits)
@@ -63,7 +67,7 @@ class ByteArray
     }
 
     /**
-     * @param string $value
+     * @param  string $value
      * @return static
      */
     public static function fromBytes(string $value)
@@ -72,7 +76,7 @@ class ByteArray
     }
 
     /**
-     * @param int $value
+     * @param  int $value
      * @return static
      */
     public static function fromInt(int $value)
@@ -81,27 +85,30 @@ class ByteArray
     }
 
     /**
-     * @param self $other
+     * @param  self $other
      * @return static
      */
     public function concat(self $other)
     {
         assert($this->bits === $other->bits, 'The two ByteArray must have same $bits');
-        return new static(array_merge(
-            $this->toArray(),
-            $other->toArray()
-        ), $this->bits);
+        return new static(
+            array_merge(
+                $this->toArray(),
+                $other->toArray()
+            ),
+            $this->bits
+        );
     }
 
     /**
-     * @param int|array|self $target
+     * @param  int|array|self $target
      * @return static
      */
     public function add($target)
     {
         if (is_int($target)) {
             return $this->add(static::fromInt($target)->convertBits($this->bits));
-        } else if (is_array($target)) {
+        } elseif (is_array($target)) {
             return $this->add(new static($target));
         }
         assert($target instanceof self);
@@ -140,8 +147,8 @@ class ByteArray
      * e.g.
      * (new ByteArray([254, 254]))->convertBits(4)->toArray() === [15, 14, 15, 14]
      *
-     * @param int $bits
-     * @param int $length
+     * @param  int $bits
+     * @param  int $length
      * @return static
      */
     public function convertBits(int $bits, int $length = null)
@@ -186,15 +193,15 @@ class ByteArray
     /**
      * slice the byte array from the lower end
      *
-     * @param int $offset
-     * @param int $length
+     * @param  int $offset
+     * @param  int $length
      * @return static
      */
     public function chomp(int $offset = null, int $length = null)
     {
         if (is_null($offset) && is_null($length)) {
             $offset = count($this->values);
-        } else if (is_null($offset)) {
+        } elseif (is_null($offset)) {
             $offset = 0;
         }
         if (is_null($length)) {
@@ -207,15 +214,15 @@ class ByteArray
     /**
      * slice the byte array from the higher end
      *
-     * @param int $offset
-     * @param int $length
+     * @param  int $offset
+     * @param  int $length
      * @return static
      */
     public function slice(int $offset = null, int $length = null)
     {
         if (is_null($offset) && is_null($length)) {
             $offset = count($this->values);
-        } else if (is_null($offset)) {
+        } elseif (is_null($offset)) {
             $offset = 0;
         }
         if (is_null($length)) {
