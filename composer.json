@@ -15,7 +15,7 @@
     "suggest": {
         "ramsey/uuid": "This dependency will make Ulid::toUuid() compatible with Uuid"
     },
-    "license": "Apache License 2.0",
+    "license": "Apache-2.0",
     "authors": [
         {
             "name": "Yuichiro Luke Smith",
