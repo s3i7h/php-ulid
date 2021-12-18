@@ -2,6 +2,9 @@
     "name": "yu-ichiro/ulid",
     "description": "A simple and robust implementation of ULID in PHP",
     "type": "library",
+    "require": {
+        "php": "^8.0 || ^7.3"
+    },
     "require-dev": {
         "phpstan/phpstan": "^1.2",
         "phpunit/phpunit": "^9.5",

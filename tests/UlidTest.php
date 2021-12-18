@@ -25,8 +25,12 @@ final class UlidTest extends \PHPUnit\Framework\TestCase
 
     public function testTimestampGenerate(): void
     {
-        TestFactory::$timestamp = fn () => 32;
-        TestFactory::$randomness = fn () => hex2bin('00000000000000000000') ?: '';
+        TestFactory::$timestamp = function () {
+            return 32;
+        };
+        TestFactory::$randomness = function () {
+            return hex2bin('00000000000000000000') ?: '';
+        };
         $this->assertSame('00000000000000000000000000', (string) new Ulid(0));
     }
 
@@ -55,8 +59,12 @@ final class UlidTest extends \PHPUnit\Framework\TestCase
 
     public function testOverflow(): void
     {
-        TestFactory::$timestamp = fn () => 0xffffffffffff;
-        TestFactory::$randomness = fn () => hex2bin('ffffffffffffffffffff') ?: '';
+        TestFactory::$timestamp = function () {
+            return 0xffffffffffff;
+        };
+        TestFactory::$randomness = function () {
+            return hex2bin('ffffffffffffffffffff') ?: '';
+        };
         $this->assertSame('7ZZZZZZZZZZZZZZZZZZZZZZZZZ', (string) new Ulid);
         $this->expectException(OverflowException::class);
         new Ulid;
@@ -64,8 +72,12 @@ final class UlidTest extends \PHPUnit\Framework\TestCase
 
     public function testUuid(): void
     {
-        TestFactory::$timestamp = fn () => 0;
-        TestFactory::$randomness = fn () => hex2bin('aaaabbbbcccccccccccc') ?: '';
+        TestFactory::$timestamp = function () {
+            return 0;
+        };
+        TestFactory::$randomness = function () {
+            return hex2bin('aaaabbbbcccccccccccc') ?: '';
+        };
         // @phpstan-ignore-next-line
         $this->assertSame('00000000-0000-aaaa-bbbb-cccccccccccc', (string) (new Ulid)->toUuid());
     }
@@ -107,15 +119,23 @@ final class UlidTest extends \PHPUnit\Framework\TestCase
 
     public function testJsonSerialize(): void
     {
-        TestFactory::$timestamp = fn () => 0xffffffffffff;
-        TestFactory::$randomness = fn () => hex2bin('ffffffffffffffffffff') ?: '';
+        TestFactory::$timestamp = function () {
+            return 0xffffffffffff;
+        };
+        TestFactory::$randomness = function () {
+            return hex2bin('ffffffffffffffffffff') ?: '';
+        };
         $this->assertSame('7ZZZZZZZZZZZZZZZZZZZZZZZZZ', (new Ulid)->jsonSerialize());
     }
 
     public function testDebugInfo(): void
     {
-        TestFactory::$timestamp = fn () => 0xffffffffffff;
-        TestFactory::$randomness = fn () => hex2bin('ffffffffffffffffffff') ?: '';
+        TestFactory::$timestamp = function () {
+            return 0xffffffffffff;
+        };
+        TestFactory::$randomness = function () {
+            return hex2bin('ffffffffffffffffffff') ?: '';
+        };
         $this->assertIsArray((new Ulid)->__debugInfo());
     }
 }
