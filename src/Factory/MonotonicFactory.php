@@ -19,12 +19,17 @@ class MonotonicFactory implements UlidFactoryInterface
         return random_bytes(10);
     }
 
+    public static function timestamp(): int
+    {
+        return (int) floor(microtime(true) * 1000);
+    }
+
     /**
      * @throws Exception
      */
     public static function generate(): Ulid
     {
-        return self::generateFromTimestamp((int) floor(microtime(true) * 1000));
+        return static::generateFromTimestamp(static::timestamp());
     }
 
     /**
@@ -33,12 +38,14 @@ class MonotonicFactory implements UlidFactoryInterface
     public static function generateFromTimestamp(int $timestamp): Ulid
     {
         $ts = ByteArray::fromInt($timestamp)->convertBits(8, 6);
-        $random = (
+        if (
             static::$lastGeneratedBytes
             && static::$lastGeneratedBytes->slice(6)->toBytes() === $ts->toBytes()
-        )
-            ? static::$lastGeneratedBytes->chomp(10)->add(1)
-            : ByteArray::fromBytes(static::randomness());
+        ) {
+            $random = static::$lastGeneratedBytes->chomp(10)->add(1);
+        } else {
+            $random = ByteArray::fromBytes(static::randomness());
+        }
 
         $next = $ts->concat($random);
         static::$lastGeneratedBytes = $next;
