@@ -180,7 +180,8 @@ class ByteArray
             $offset = count($this->values);
         } else if (is_null($offset)) {
             $offset = 0;
-        } else if (is_null($length)) {
+        }
+        if (is_null($length)) {
             $length = $offset;
             $offset = 0;
         }
@@ -200,7 +201,8 @@ class ByteArray
             $offset = count($this->values);
         } else if (is_null($offset)) {
             $offset = 0;
-        } else if (is_null($length)) {
+        }
+        if (is_null($length)) {
             $length = $offset;
             $offset = 0;
         }
