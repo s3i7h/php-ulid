@@ -1,0 +1,72 @@
+name: CI
+on: [push]
+jobs:
+  phpcs:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php: [7.3, 7.4, 8.0, 8.1]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v1
+          extensions: none, mbstring
+      - name: Cache vendor
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ matrix.os }}-${{ matrix.php }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/composer.json')) }}
+      - name: Composer install
+        run: composer install
+      - name: PHP CodeSniffer
+        run: ./vendor/bin/phpcs -s
+  phpstan:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php: [7.3, 7.4, 8.0, 8.1]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v1
+          extensions: none, mbstring
+      - name: Cache vendor
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ matrix.os }}-${{ matrix.php }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/composer.json')) }}
+      - name: Composer install
+        run: composer install
+      - name: PHPStan
+        run: ./vendor/bin/phpstan analyze
+  phpunit:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        php: [7.3, 7.4, 8.0, 8.1]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v1
+          extensions: none, mbstring
+      - name: Cache vendor
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ matrix.os }}-${{ matrix.php }}-deps-${{ hashFiles(format('{0}{1}', github.workspace, '/composer.json')) }}
+      - name: Composer install
+        run: composer install
+      - name: PHPUnit
+        run: ./vendor/bin/phpunit --testdox
